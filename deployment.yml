@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: portfolio
-        image: YOUR_USERNAME/my-portfolio:v1  # Change YOUR_USERNAME
+        image: jagdeep1122/my-portfolio:v1  # Change YOUR_USERNAME
         ports:
         - containerPort: 80
         resources:  # Resource limits as required
