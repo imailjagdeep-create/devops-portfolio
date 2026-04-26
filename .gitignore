@@ -1,0 +1,22 @@
+echo # Docker > .gitignore
+echo *.log >> .gitignore
+echo *.pid >> .gitignore
+echo .env >> .gitignore
+echo >> .gitignore
+echo # IDE >> .gitignore
+echo .vscode/ >> .gitignore
+echo .idea/ >> .gitignore
+echo *.swp >> .gitignore
+echo >> .gitignore
+echo # OS >> .gitignore
+echo .DS_Store >> .gitignore
+echo Thumbs.db >> .gitignore
+echo desktop.ini >> .gitignore
+echo >> .gitignore
+echo # Jenkins >> .gitignore
+echo jenkins.war >> .gitignore
+echo .jenkins/ >> .gitignore
+echo >> .gitignore
+echo # Temporary files >> .gitignore
+echo *.tmp >> .gitignore
+echo *.temp >> .gitignore
