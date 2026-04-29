@@ -5,6 +5,8 @@ pipeline {
         DOCKER_IMAGE = 'jagdeep1122/my-portfolio'
         DOCKER_TAG = 'latest'
         DOCKER_PATH = 'C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe'
+        DOCKER_USERNAME = 'jagdeep1122'
+        DOCKER_PASSWORD = 'dckr_pat_3YpAayF7979LAtmqXt2THewBedw'
     }
     
     stages {
@@ -34,10 +36,8 @@ pipeline {
                 echo '========================================='
                 echo '📤 STAGE 3: Pushing image to Docker Hub...'
                 echo '========================================='
-                withCredentials([string(credentialsId: 'docker-token', variable: 'DOCKER_TOKEN')]) {
-                    bat "echo %DOCKER_TOKEN% | \"${env.DOCKER_PATH}\" login -u jagdeep1122 --password-stdin"
-                    bat "\"${env.DOCKER_PATH}\" push ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                }
+                bat "echo ${DOCKER_PASSWORD} | \"${env.DOCKER_PATH}\" login -u ${DOCKER_USERNAME} --password-stdin"
+                bat "\"${env.DOCKER_PATH}\" push ${DOCKER_IMAGE}:${DOCKER_TAG}"
                 echo '✅ Image pushed to Docker Hub!'
             }
         }
