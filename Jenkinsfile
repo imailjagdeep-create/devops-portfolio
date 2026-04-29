@@ -8,7 +8,6 @@ pipeline {
     }
     
     stages {
-        // Stage 1: Pull code from Git
         stage('Code Pull') {
             steps {
                 echo '========================================='
@@ -20,36 +19,29 @@ pipeline {
             }
         }
         
-        // Stage 2: Build Docker image
         stage('Image Build') {
             steps {
                 echo '========================================='
                 echo '🐳 STAGE 2: Building Docker image...'
                 echo '========================================='
-                bat "\"${DOCKER_PATH}\" build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                bat "\"${env.DOCKER_PATH}\" build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
                 echo '✅ Docker image built!'
             }
         }
         
-        // Stage 3: Push image to registry
         stage('Push Image') {
             steps {
                 echo '========================================='
                 echo '📤 STAGE 3: Pushing image to Docker Hub...'
                 echo '========================================='
-                withCredentials([usernamePassword(
-                    credentialsId: 'docker-hub', 
-                    passwordVariable: 'DOCKER_PASSWORD', 
-                    usernameVariable: 'DOCKER_USERNAME'
-                )]) {
-                    bat "echo %DOCKER_PASSWORD% | \"${DOCKER_PATH}\" login -u %DOCKER_USERNAME% --password-stdin"
-                    bat "\"${DOCKER_PATH}\" push ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                withCredentials([string(credentialsId: 'docker-token', variable: 'DOCKER_TOKEN')]) {
+                    bat "echo %DOCKER_TOKEN% | \"${env.DOCKER_PATH}\" login -u jagdeep1122 --password-stdin"
+                    bat "\"${env.DOCKER_PATH}\" push ${DOCKER_IMAGE}:${DOCKER_TAG}"
                 }
                 echo '✅ Image pushed to Docker Hub!'
             }
         }
         
-        // Stage 4: Deploy to Kubernetes
         stage('Deploy') {
             steps {
                 echo '========================================='
@@ -65,22 +57,11 @@ pipeline {
     
     post {
         success {
-            echo '========================================='
-            echo '🎉 PIPELINE EXECUTED SUCCESSFULLY! 🎉'
-            echo '========================================='
-            echo '📍 Application URL: http://localhost:30080'
-            echo '========================================='
+            echo '🎉 PIPELINE EXECUTED SUCCESSFULLY!'
+            echo 'Application URL: http://localhost:30080'
         }
         failure {
-            echo '========================================='
             echo '❌ PIPELINE FAILED!'
-            echo '========================================='
-            echo 'Check the logs above for errors.'
-            echo 'Common issues:'
-            echo '  - Docker Desktop not running'
-            echo '  - Kubernetes not enabled in Docker Desktop'
-            echo '  - Docker Hub credentials incorrect'
-            echo '========================================='
         }
     }
 }
