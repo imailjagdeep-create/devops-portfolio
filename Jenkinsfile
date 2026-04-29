@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'jagdeep1122/my-portfolio'
         DOCKER_TAG = 'latest'
-        DOCKER_PATH = 'C:\\Program Files\\Docker\\Docker\\frontend\\docker.exe'
+        DOCKER_PATH = 'C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe'
     }
     
     stages {
