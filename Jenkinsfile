@@ -4,61 +4,83 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'jagdeep1122/my-portfolio'
         DOCKER_TAG = 'latest'
+        DOCKER_PATH = 'C:\\Program Files\\Docker\\Docker\\frontend\\docker.exe'
     }
     
     stages {
         // Stage 1: Pull code from Git
         stage('Code Pull') {
             steps {
-                echo 'Pulling code from GitHub...'
+                echo '========================================='
+                echo '📦 STAGE 1: Pulling code from GitHub...'
+                echo '========================================='
                 git branch: 'main', 
                     url: 'https://github.com/imailjagdeep-create/devops-portfolio.git'
-                echo 'Code pulled successfully!'
+                echo '✅ Code pulled successfully!'
             }
         }
         
         // Stage 2: Build Docker image
         stage('Image Build') {
             steps {
-                echo 'Building Docker image...'
-                sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
-                echo 'Docker image built!'
+                echo '========================================='
+                echo '🐳 STAGE 2: Building Docker image...'
+                echo '========================================='
+                bat "\"${DOCKER_PATH}\" build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                echo '✅ Docker image built!'
             }
         }
         
         // Stage 3: Push image to registry
         stage('Push Image') {
             steps {
-                echo 'Pushing image to Docker Hub...'
-                withCredentials([usernamePassword(credentialsId: 'docker-hub', 
-                                                  passwordVariable: 'DOCKER_PASSWORD', 
-                                                  usernameVariable: 'DOCKER_USERNAME')]) {
-                    sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
-                    sh 'docker push ${DOCKER_IMAGE}:${DOCKER_TAG}'
+                echo '========================================='
+                echo '📤 STAGE 3: Pushing image to Docker Hub...'
+                echo '========================================='
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker-hub', 
+                    passwordVariable: 'DOCKER_PASSWORD', 
+                    usernameVariable: 'DOCKER_USERNAME'
+                )]) {
+                    bat "echo %DOCKER_PASSWORD% | \"${DOCKER_PATH}\" login -u %DOCKER_USERNAME% --password-stdin"
+                    bat "\"${DOCKER_PATH}\" push ${DOCKER_IMAGE}:${DOCKER_TAG}"
                 }
-                echo 'Image pushed to Docker Hub!'
+                echo '✅ Image pushed to Docker Hub!'
             }
         }
         
         // Stage 4: Deploy to Kubernetes
         stage('Deploy') {
             steps {
-                echo 'Deploying to Kubernetes...'
-                sh 'kubectl apply -f deployment.yaml'
-                sh 'kubectl apply -f service.yaml'
-                sh 'kubectl rollout status deployment/portfolio-deployment'
-                echo 'Deployment complete!'
+                echo '========================================='
+                echo '☸️ STAGE 4: Deploying to Kubernetes...'
+                echo '========================================='
+                bat "kubectl apply -f deployment.yaml"
+                bat "kubectl apply -f service.yaml"
+                bat "kubectl rollout status deployment/portfolio-deployment"
+                echo '✅ Deployment complete!'
             }
         }
     }
     
     post {
         success {
-            echo 'Pipeline executed successfully!'
-            echo 'Application URL: http://localhost:30080'
+            echo '========================================='
+            echo '🎉 PIPELINE EXECUTED SUCCESSFULLY! 🎉'
+            echo '========================================='
+            echo '📍 Application URL: http://localhost:30080'
+            echo '========================================='
         }
         failure {
-            echo 'Pipeline failed! Check logs above.'
+            echo '========================================='
+            echo '❌ PIPELINE FAILED!'
+            echo '========================================='
+            echo 'Check the logs above for errors.'
+            echo 'Common issues:'
+            echo '  - Docker Desktop not running'
+            echo '  - Kubernetes not enabled in Docker Desktop'
+            echo '  - Docker Hub credentials incorrect'
+            echo '========================================='
         }
     }
 }
