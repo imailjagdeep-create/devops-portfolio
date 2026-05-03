@@ -67,7 +67,6 @@ kubectl get services      # Should show NodePort
 # Access application
 kubectl port-forward service/portfolio-service 31181:80
 
-# Open browser to: http://localhost:31181
 
 # Rolling update test
 kubectl set image deployment/portfolio-deployment portfolio=jagdeep1122/my-portfolio:v1
@@ -80,7 +79,7 @@ kubectl delete -f service.yaml
 ### Start Jenkins
 java -jar jenkins.war --httpPort=8081
 
-# Access Jenkins: http://localhost:8081
+
 
 devops-portfolio/
 │
