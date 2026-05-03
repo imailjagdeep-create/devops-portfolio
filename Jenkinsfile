@@ -60,7 +60,7 @@ pipeline {
     post {
         success {
             echo '🎉 PIPELINE EXECUTED SUCCESSFULLY!'
-            echo 'Application URL: http://localhost:30080'
+            echo 'Application URL: http://localhost:31181'
         }
         failure {
             echo '❌ PIPELINE FAILED!'
