@@ -11,21 +11,21 @@ pipeline {
         stage('Code Pull') {
             steps {
                 echo '========================================='
-                echo '📦 STAGE 1: Pulling code from GitHub...'
+                echo 'STAGE 1: Pulling code from GitHub...'
                 echo '========================================='
                 git branch: 'main', 
                     url: 'https://github.com/imailjagdeep-create/devops-portfolio.git'
-                echo '✅ Code pulled successfully!'
+                echo 'Code pulled successfully!'
             }
         }
         
         stage('Image Build') {
             steps {
                 echo '========================================='
-                echo '🐳 STAGE 2: Building Docker image...'
+                echo 'STAGE 2: Building Docker image...'
                 echo '========================================='
                 bat "\"${env.DOCKER_PATH}\" build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-                echo '✅ Docker image built!'
+                echo 'Docker image built!'
             }
         }
         
@@ -40,30 +40,30 @@ pipeline {
                     bat "\"${env.DOCKER_PATH}\" login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%"
                     bat "\"${env.DOCKER_PATH}\" push ${DOCKER_IMAGE}:${DOCKER_TAG}"
                 }
-                echo '✅ Image pushed to Docker Hub!'
+                echo 'Image pushed to Docker Hub!'
             }
         }
         
         stage('Deploy') {
             steps {
                 echo '========================================='
-                echo '☸️ STAGE 4: Deploying to Kubernetes...'
+                echo 'STAGE 4: Deploying to Kubernetes...'
                 echo '========================================='
                 bat "kubectl apply -f deployment.yml"
                 bat "kubectl apply -f service.yml"
                 bat "kubectl rollout status deployment/portfolio-deployment"
-                echo '✅ Deployment complete!'
+                echo 'Deployment complete!'
             }
         }
     }
     
     post {
         success {
-            echo '🎉 PIPELINE EXECUTED SUCCESSFULLY!'
+            echo 'PIPELINE EXECUTED SUCCESSFULLY!'
             echo 'Application URL: http://localhost:31181'
         }
         failure {
-            echo '❌ PIPELINE FAILED!'
+            echo 'PIPELINE FAILED!'
         }
     }
 }
