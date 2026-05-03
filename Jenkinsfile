@@ -49,8 +49,8 @@ pipeline {
                 echo '========================================='
                 echo '☸️ STAGE 4: Deploying to Kubernetes...'
                 echo '========================================='
-                bat "kubectl apply -f deployment.yaml"
-                bat "kubectl apply -f service.yaml"
+                bat "kubectl apply -f deployment.yml"
+                bat "kubectl apply -f service.yml"
                 bat "kubectl rollout status deployment/portfolio-deployment"
                 echo '✅ Deployment complete!'
             }
