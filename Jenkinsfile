@@ -31,15 +31,13 @@ pipeline {
         
         stage('Push Image') {
             steps {
-                echo '========================================='
-                echo '📤 STAGE 3: Pushing image to Docker Hub...'
-                echo '========================================='
                 withCredentials([usernamePassword(
                     credentialsId: 'docker-hub',
                     usernameVariable: 'DOCKER_USERNAME',
                     passwordVariable: 'DOCKER_PASSWORD'
                 )]) {
-                    bat "echo %DOCKER_PASSWORD% | \"${env.DOCKER_PATH}\" login -u %DOCKER_USERNAME% --password-stdin"
+                    // Use -p flag directly instead of --password-stdin (safer on Windows)
+                    bat "\"${env.DOCKER_PATH}\" login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%"
                     bat "\"${env.DOCKER_PATH}\" push ${DOCKER_IMAGE}:${DOCKER_TAG}"
                 }
                 echo '✅ Image pushed to Docker Hub!'
